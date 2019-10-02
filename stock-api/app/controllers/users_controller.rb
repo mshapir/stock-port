@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+  skip_before_action :authenticate_request!, only: [:login, :create]
+
   def login
     user = User.find_by(username: params[:username].to_s.downcase)
 
