@@ -4,11 +4,11 @@ class JsonWebToken
 
   def self.encode(payload)
     payload.reverse_merge!(meta)
-    JWT.encode(payload, ParkMe::Application.credentials.secret_key_base)
+    JWT.encode(payload, 'secret')
   end
 
   def self.decode(token)
-    JWT.decode(token, ParkMe::Application.credentials.secret_key_base)
+    JWT.decode(token, 'secret')
   end
 
   def self.valid_payload(payload)

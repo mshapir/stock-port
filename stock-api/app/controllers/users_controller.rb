@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_request!, only: [:login, :create]
 
   def login
-    user = User.find_by(username: params[:username].to_s.downcase)
+    user = User.find_by(email: params[:email].to_s.downcase)
 
     if user && user.authenticate(params[:password])
         token = JsonWebToken.encode({user_id: user.id})
