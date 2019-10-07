@@ -6,6 +6,7 @@ one:
   number_of_shares: 1
   transaction_type: MyString
   user: one
+  portfolio: one
 
 two:
   ticker_name: MyString
@@ -13,3 +14,4 @@ two:
   number_of_shares: 1
   transaction_type: MyString
   user: two
+  portfolio: two

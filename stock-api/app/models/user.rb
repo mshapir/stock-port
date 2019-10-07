@@ -5,6 +5,6 @@ class User < ApplicationRecord
   validates_presence_of :name
   validates :email, uniqueness: true
 
-  has_many :transactions, through: :portfolios
+  has_many :transactions
 
 end

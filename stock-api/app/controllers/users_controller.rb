@@ -46,6 +46,20 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  def self.can_make_transaction(user_id, price, number_of_shares)
+    spending_money = User.find(user_id).spending_money
+    return spending_money >= (price * number_of_shares)
+  end
+
+  def self.update_spending_money(user_id, total_spent)
+    @user = User.find(user_id)
+    if @user.spending_money < total_spent
+      return false
+    end
+    new_spending_money = @user.spending_money - total_spent
+    return @user.update_attribute :spending_money, new_spending_money
+  end
+
   private
 
   def user_params

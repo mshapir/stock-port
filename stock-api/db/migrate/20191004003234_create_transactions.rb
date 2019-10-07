@@ -6,7 +6,7 @@ class CreateTransactions < ActiveRecord::Migration[5.2]
       t.integer :number_of_shares
       t.string :transaction_type
       t.references :user, foreign_key: true
-      t.references :transaction, foreign_key: true
+      t.references :portfolio, foreign_key: true
 
       t.timestamps
     end

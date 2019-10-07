@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_02_172936) do
+ActiveRecord::Schema.define(version: 2019_10_04_003234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,10 +29,10 @@ ActiveRecord::Schema.define(version: 2019_10_02_172936) do
     t.integer "number_of_shares"
     t.string "transaction_type"
     t.bigint "user_id"
-    t.bigint "transaction_id"
+    t.bigint "portfolio_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["transaction_id"], name: "index_transactions_on_transaction_id"
+    t.index ["portfolio_id"], name: "index_transactions_on_portfolio_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -46,6 +46,6 @@ ActiveRecord::Schema.define(version: 2019_10_02_172936) do
   end
 
   add_foreign_key "portfolios", "users"
-  add_foreign_key "transactions", "transactions"
+  add_foreign_key "transactions", "portfolios"
   add_foreign_key "transactions", "users"
 end
