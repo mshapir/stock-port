@@ -1,4 +1,4 @@
-Instructions: Welcome to my Stock App, a web application that allows you to build a portfolio and view transactions. 
+Instructions: Welcome to my Stock App, a web application that allows you to build a portfolio and view transactions. This API leverages the Alpha Vantage API (https://www.alphavantage.co/#about) for current stock states (including tickers their prices). 
 
 Instructions for use:
 
