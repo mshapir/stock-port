@@ -16,32 +16,61 @@ class PortfoliosController < ApplicationController
    end
   end
 
-  def get_updated_portfolio
+  def show
     @portfolio = Portfolio.find_by(user_id: params[:user_id])
-    current_prices = get_current_prices(@portfolio)
-    render json: {portfolio: @portfolio, current_prices: current_prices, status: 201}
+    # current_prices = get_current_prices(@portfolio)
+    entries = get_updated_portfolio(@portfolio)
+    render json: {portfolio: @portfolio, entries: entries, status: 201}
   end
 
   def get_current_prices(portfolio)
     stocks_controller = StocksController.new
     transactions = portfolio.transactions
     ticker_prices = {}
-    porfolio_worth = 0
+    portfolio_worth = 0
     transactions.each do |transaction|
       ticker_name = transaction.ticker_name
       if !ticker_prices.include?(ticker_name)
-        ticker_price = stocks_controller.get_stock_price(ticker_name).price
-        total_shares = transaction.number_of_shares
-        ticker_prices[ticker_name] = ticker_price
-        porfolio_worth += (total_shares * ticker_price)
+        ticker_price = stocks_controller.get_stock_price(ticker_name)[:price].to_f
+        total_shares = transaction[:number_of_shares].to_i
+        ticker_prices[:ticker_name] = ticker_price
+        portfolio_worth += (total_shares * ticker_price)
       end
     end
-    update_networth(portfolio, porfolio_worth)
+    update_networth(portfolio, portfolio_worth)
     return ticker_prices
   end
 
-  def update_networth(portfolio, porfolio_worth)
+  def update_networth(portfolio, portfolio_worth)
     portfolio.total_networth = portfolio_worth
+    portfolio.save
+  end
+
+  def get_updated_portfolio(portfolio)
+    stocks_controller = StocksController.new
+    transactions = portfolio.transactions
+    portfolio_entries = {}
+    transactions.each do |transaction|
+      ticker_name = transaction[:ticker_name]
+      total_shares = transaction[:number_of_shares].to_i
+      if !portfolio_entries.include?(ticker_name)
+        ticker_price = stocks_controller.get_stock_price(ticker_name)[:price].to_f
+      else
+        ticker_price = transaction[:ticker_price].to_f
+        total_shares += portfolio_entries.fetch(ticker_name)[:total_shares]
+      end
+      portfolio_entries[ticker_name] = {total_shares: total_shares.to_i, bought_price: transaction[:ticker_price].to_s.to_f, current_price: ticker_price.to_f}
+    end
+    update_networth_2(portfolio, portfolio_entries)
+    return portfolio_entries
+  end
+
+  def update_networth_2(portfolio, portfolio_entries)
+    total_networth = 0
+    portfolio_entries.each do |key, entry|
+      total_networth += (entry[:current_price] * entry[:total_shares])
+    end
+    portfolio.total_networth = total_networth
     portfolio.save
   end
 
