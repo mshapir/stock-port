@@ -31,7 +31,6 @@ class StocksController < ApplicationController
   end
 
   def get_response(ticker)
-    # api_key = "0Z7J40PP27YLNAY7"
     api_key = "C8ULWGL102UUW7ZO"
     function = "TIME_SERIES_INTRADAY"
     ticker_name = ticker
